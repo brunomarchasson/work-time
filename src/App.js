@@ -1,24 +1,28 @@
-import logo from './logo.svg';
+import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
 import './App.css';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import TimeRange from './component/TimeRange';
+import { Paper, Stack, styled, ThemeProvider } from '@mui/material';
+import Week from './component/TimeRange/Week';
 
+const AppContainer = styled('div')({
+  height: '100vh',
+  padding: '1rem',
+});
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    // <ThemeProvider>
+    <LocalizationProvider dateAdapter={AdapterLuxon}>
+    <AppContainer >
+    <Stack gap={2}>
+       <TimeRange></TimeRange>
+       <TimeRange></TimeRange>
+       <Week weekYear={2020} weekNumber={1} />
+       <Week weekYear={2020} weekNumber={2} />
+    </Stack>
+    </AppContainer>
+     </LocalizationProvider>
+    // </ThemeProvider>
   );
 }
 
