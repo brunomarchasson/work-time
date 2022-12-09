@@ -1,9 +1,31 @@
-import React from 'react'
+import React, { useCallback, useContext } from 'react'
 import PropTypes from 'prop-types'
+import { TimeRangeContext } from './Context';
+import { Paper, Zoom } from '@mui/material';
 
-function Hour({date}) {
+function Hour({interval}) {
+  const {selection: {startSelect, endSelect, addToSelection, isSelected}} = useContext(TimeRangeContext)
+  const handleMouveMove = (p) => {
+    addToSelection(interval)
+  };
+
+  const handleMouseDown = useCallback((e) => {
+    e.preventDefault();
+    startSelect(interval)
+  }, [startSelect, interval])
+
+  const handleMouseUp = useCallback((e) => {
+    e.preventDefault();
+    endSelect()
+  }, [endSelect]);
+
   return (
-    <div>{date.toLocaleString({ hour: '2-digit', minute: '2-digit', hourCycle: 'h23' })}</div>
+    <div onMouseDown = {handleMouseDown} onMouseUp={handleMouseUp} onMouseMove = {handleMouveMove} style={{height: '1rem'}}>
+
+      <Zoom  in={ isSelected(interval)}>
+        <Paper square sx={{height: '1rem', bgcolor:"primary.main"}}></Paper>
+      </Zoom>
+    </div>
   )
 }
 

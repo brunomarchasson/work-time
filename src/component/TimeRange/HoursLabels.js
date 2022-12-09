@@ -10,52 +10,43 @@ import { Duration } from "luxon";
 import { Interval } from "luxon";
 import Hour from "./Hour";
 import { TimeRangeContext } from "./Context";
+import HourLabel from "./HourLabel";
 
-function Hours({ date }) {
+function HoursLabel({ date, HourComponent }) {
   const [hours, setHours] = useState({});
-  const { showBefore, showAfter, getHours } = useContext(TimeRangeContext);
+  const { showBefore, setShowBefore, showAfter, setShowAfter, getHours } =
+    useContext(TimeRangeContext);
 
   useEffect(() => {
-    setHours(getHours(date));
-  }, [date, getHours]);
-
-  if (!date) return null;
+    setHours(getHours());
+  }, [getHours]);
+  const handleShowBefore = () => setShowBefore((cur) => !cur);
+  const handleShowAfter = () => setShowAfter((cur) => !cur);
   return (
     <Stack>
-      <div
-        style={{
-          fontSize: "1.5rem",
-          height: "1em",
-          padding: 8,
-          boxSizing: "content-box",
-        }}
-      ></div>
+      <IconButton aria-label="show-before" onClick={handleShowBefore}>
+        {showBefore ? <ExpandMoreIcon /> : <UnfoldMoreIcon />}
+      </IconButton>
       <Collapse in={showBefore}>
         {(hours.before || []).map((i) => (
-          <Hour interval={i}></Hour>
+          <HourLabel interval={i}></HourLabel>
         ))}
       </Collapse>
       {(hours.standard || []).map((i) => (
-        <Hour interval={i}></Hour>
+        <HourLabel interval={i}></HourLabel>
       ))}
       <Collapse in={showAfter}>
         {(hours.after || []).map((i) => (
-          <Hour interval={i}></Hour>
+          <HourLabel interval={i}></HourLabel>
         ))}
       </Collapse>
-
-      <div
-        style={{
-          fontSize: "1.5rem",
-          height: "1em",
-          padding: 8,
-          boxSizing: "content-box",
-        }}
-      ></div>
+      <IconButton aria-label="show-after" onClick={handleShowAfter}>
+        {showAfter ? <ExpandLessIcon /> : <UnfoldMoreIcon />}
+      </IconButton>
     </Stack>
   );
 }
 
-Hours.propTypes = {};
+HoursLabel.propTypes = {};
 
-export default Hours;
+export default HoursLabel;
